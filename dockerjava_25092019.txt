@@ -1,0 +1,292 @@
+Step1
+cf login -a api.run.pivotal.io
+
+step2
+
+cf push routename -p <jar>
+        ref name   
+cf push globalins-cf -p <jar>
+
+cf  push uploaddoceswari-cf -p <jar>
+step3
+connect app to db service
+
+step 4
+restage
+
+
+
+-------------------------------------------------------------
+step 0:          ext  int  
+docker run -d -p 9411:9411 openzipkin/zipkin
+
+
+
+step 1 :
+
+docker pull oscarfonts/h2
+
+docker run --name es-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=demo -e MYSQL_USER=demo_user -e MYSQL_PASSWORD=demo_pass -d mysql
+
+docker run --name data-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=datamaticsclaimdb -e MYSQL_USER=demo_user -e MYSQL_PASSWORD=demo_pass -d mysql
+
+docker run --name virtusa-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=virtusacustomerdb -e MYSQL_USER=demo_user -e MYSQL_PASSWORD=demo_pass -d mysql
+
+
+
+
+
+docker container ls -a
+
+docker run --name rps-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=rpsdb -e MYSQL_USER=rps_user -e MYSQL_PASSWORD=rps_pass -d mysql
+
+docker run --name boa-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=boamumbaidb -e MYSQL_USER=boa_user -e MYSQL_PASSWORD=boa_pass -d mysql
+
+
+docker run --name es-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=escustomerdb -e MYSQL_USER=demo_user -e MYSQL_PASSWORD=demo_pass -d mysql
+
+
+check the log
+docker logs demo-mysql
+running log
+docker logs -f demo-mysql
+
+remove the container
+
+docker rm containerid
+
+stop the container
+docker stop containerid
+
+restart the container
+docker restart containerid
+
+
+
+
+
+testing......
+docker exec -it demo-mysql mysql -u demo_user -p
+docker exec -it es-mysql mysql -u root -p
+docker exec -it boa-mysql mysql -u root -p
+docker exec -it data-mysql mysql -u root -p
+docker exec -it virtusa-mysql mysql -u root -p
+
+create database use root credentials when container running
+
+step 2
+
+create docker file
+FROM java:8
+LABEL maintainer=“chathuranga.t@gmail.com”
+VOLUME /tmp
+EXPOSE 8080
+ADD target/spring-boot-data-jpa-example-0.0.1-SNAPSHOT.jar spring-boot-data-jpa-example-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","spring-boot-data-jpa-example-0.0.1-SNAPSHOT.jar"]
+
+step 3
+
+//must after changing db url
+mvn clean install -DskipTests 
+
+
+step 4
+
+docker build -f dockerfile -t excustomerserviceapp2020 .
+
+or
+------------------------------
+sample docker file
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+ARG JAR_FILE
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+-----------------------------------------
+docker build --build-args=build/libs/*.jar -t myorg/myapp .
+
+or
+docker build -t globalins .
+
+step 6
+
+docker images
+
+step 7
+docker ps
+
+
+      
+step 8
+ docker run -h 192.168.99.101 -p 7070:7070 --name visa-app -d usvisaprocessapp:latest
+
+ docker run -h 192.168.99.101 -p 7070:7070 --name boa-visa-app -d boausvisaapp:latest
+                                                 container name
+docker run -h 192.168.99.100 -p 6060:6060 --name demo-app 
+--link demo-mysql:mysql -d globalins
+
+docker run -h 192.168.99.100 -p 6060:6060 --name es-ins-app
+--link es-mysql:mysql -d es-insapp2019
+
+docker run -h 192.168.99.100 -p 7070:7070 --name es-customer-app-c1
+--link es-mysql:mysql -d escustomerserviceapp2020:latest
+
+//creating container for java application
+docker run -h 192.168.99.100 -p 7070:7070 --name dt-claim-app-c1
+--link data-mysql:mysql -d datamaticsclaimappimage:latest
+
+http://192.168.99.100:7070/addcustomer
+
+docker run -h 192.168.99.100 -p 7072:7070 --name dt-claim-app-c1
+--link data-mysql:mysql -d datamaticsclaimappimage:latest
+
+docker run -h 192.168.99.103 -p 7070:7070 --name virtusa-customer-app-c1
+--link virtusa-mysql:mysql -d customerserviceapp:latest
+
+
+
+
+docker run -h 192.168.99.100 -p 7074:7070 --name dt-claim-app-c1
+--link data-mysql:mysql -d datamaticsclaimappimage:latest
+
+
+
+docker run -h 192.168.99.100 -p 7076:6060 --name es-ins-app-c111
+--link es-mysql:mysql -d eswaribala/dockerinsappdec2019:tag1
+
+docker run -h 192.168.99.100 -p 7070:7070 --name es-customer-c1 --link es-mysql:mysql -d escustomerserviceapp2020:latest
+
+docker run -h 192.168.99.100 -p 7072:6060 --name es-ins-app-c1
+--link es-mysql:mysql -d es-insapp2019
+
+docker run -h 192.168.99.100 -p 6060:6060 --name ins-app 
+--link demo-mysql:mysql -d ins-jpa-app
+
+        mysql container name:mysql image name     app image name     
+docker run -h 192.168.99.100 -p 7070:6060 --name test-app 
+--link demo-mysql:mysql -d spring-jpa-app
+
+docker run -h 192.168.99.100 -p 7070:7070 --name kycprocess-app 
+--link boa-mysql:mysql -d kycprocess
+
+
+docker run -h 192.168.99.100 -p 7090:6060 --name container-app 
+--link demo-mysql:mysql -d kycmumbai-app
+
+
+docker run -h 192.168.99.100 -p 6070:6070 --name ldap-container-app 
+--link demo-mysql:mysql -d ldap2019-app
+
+
+docker run -h 192.168.99.103 -p 9200:9200 -p 9300:9300 --name elastic-container-app 
+-d docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+
+
+
+
+docker run -h 192.168.99.100 -p 8761:8761 --name eurekacontainer-app -d eureka-app:latest
+
+docker run -h 192.168.99.100 -p 8761:8761 --name eurekacontainer2019-app -d eureka2019-app:latest
+
+
+
+-----------------------------------------------------
+Step 9
+docker hub
+https://hub.docker.com/
+username:dockerid - not mail id -- eswaribala
+password:*****
+------------------------------------------------
+           image name            docker id  repo    tagname     
+docker tag dockersampling:latest eswaribala/rpsdockertraining:v1
+docker tag datamaticsclaimappimage:latest eswaribala/datamaticsrepo:v1
+
+docker tag practicelabapp:latest eswaribala/practicelabmay2020:v1
+docker push  eswaribala/practicelabmay2020:v1
+
+docker tag customerapp:latest eswaribala/practicelab:v1
+docker push  eswaribala/practicelab:v1
+
+
+
+
+
+
+docker push eswaribala/datamaticsrepo:v1
+
+stage 1
+docker tag customerappos:latest eswaribala/customerrepo:v1
+
+stage 2
+docker push eswaribala/customerrepo:v1
+
+
+
+
+
+docker tag bankingdockerapp:latest eswaribala/rpscgimsrepo:v1
+
+docker tag globalins eswaribala/globalinsorepo:v1
+docker tag ins-jpa-app eswaribala/esinsapprepo:v1
+
+docker tag es-insapp2019:latest eswaribala/dockerinsappdec2019:tag1
+
+docker tag insapp-os-img:latest eswaribala/insapp-os-repo:latest
+
+docker push eswaribala/insapp-os-repo:latest
+
+docker push eswaribala/rpsfdrepo:v1 
+
+docker push eswaribala/rpscgimsrepo:v1
+
+docker push eswaribala/globalinsorepo:v1
+
+docker push eswaribala/dockerinsappdec2019:tag1
+--------------------------------------------------------------
+oc new-app eswaribala/insapp-os-repo:latest --name=es-ins-os-app
+
+http://ins-insurance-app-openshift.apps.us-east-2.starter.openshift-online.com/browser/index.html#/
+----------------------------------------------------------
+
+
+Open a terminal window.
+
+Sign into your Azure account with the Azure CLI by typing az login
+
+Create an Azure service principal by typing az ad sp create-for-rbac --name "uuuuuuuu" --password "pppppppp" (uuuuuuuu is the user name and pppppppp is the password for the service principal).
+
+Azure should print out a JSON response resembling this:
+
+
+{
+   "appId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+   "displayName": "uuuuuuuu",
+   "name": "http://uuuuuuuu",
+   "password": "pppppppp",
+   "tenant": "tttttttt-tttt-tttt-tttt-tttttttttttt"
+}
+
+Configure Maven to use your Azure service principal
+In this section, you will configure Maven to authenticate using your Azure service principal for web app deployment.
+
+Open your Maven settings.xml file in a text editor (usually found at either /etc/maven/settings.xml or $HOME/.m2/settings.xml).
+
+Add your Azure service principal settings from the previous section of this tutorial to the <servers> collection in the settings.xml file as shown below:
+
+<servers>
+   <server>
+     <id>azure-auth</id>
+      <configuration>
+         <client>aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa</client>
+         <tenant>tttttttt-tttt-tttt-tttt-tttttttttttt</tenant>
+         <key>pppppppp</key>
+         <environment>AZURE</environment>
+      </configuration>
+   </server>
+</servers>
+Save and close the settings.xml file.
+
+./mvnw azure-webapp:deploy
+------------------------------------------------------
+
+
