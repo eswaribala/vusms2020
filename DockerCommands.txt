@@ -1,0 +1,539 @@
+https://www.studytrails.com/devops/kubernetes/install-minikube-and-docker-with-virtualbox-on-windows-10-home/
+
+
+docker-machine create default --virtualbox-no-vtx-check (bios enabled/disabled error)  
+--------------------------------------
+docker-machine rm default  (ip issues)
+------------------------------------
+docker run -it --name webapp -p 80:80 -p 1872  microsoft/iis:latest
+docker inspect --format '{{ .NetworkSettings.Networks.nat.IPAddress }}' iis
+---------------------------------------------------------------
+1.Version 
+docker -v
+------------------------------------------
+2.Time to start running the container:
+
+docker container run alpine echo "Hello World"
+
+Unable to find image 'alpine:latest' locally
+ 
+latest: Pulling from library/alpine
+ 
+2fdfe1cd78c2: Pull complete
+ 
+Digest: sha256:ccba511b...
+-----------------------------------
+3.Run a Process Inside a Container
+docker container run centos ping -c 5 127.0.0.1
+===================================
+4.Listing Containers
+ docker container ls
+======================================
+5.If you want to list all the containers defined on your system, you can use the command-line parameter -a or -all as follows:
+
+$ docker container ls -a
+
+This will list containers in any state, be it created, running, or exited.
+======================================================
+6. Sometimes, you may want to just list the IDs of all the containers. For this, you have the -q parameter:
+
+$ docker container ls -q
+---------------------------------------------
+7.The above command deletes all the containers currently defined on the system, including the stopped ones. The rm command stands for remove
+$ docker container rm -f $(docker container ls -a -q)
+
+----------------------------------------------
+8.Remove Container
+docker container rm <container ID>
+-------------------------------------------
+9.docker pull
+
+Usage: docker pull <image name>
+docker pull ubuntu
+This command is used to pull images from the docker repository(hub.docker.com)
+--------------------------------------------------
+10.docker run
+
+Usage: docker run -it -d <image name>
+
+This command is used to create a container from an image
+------------------------------------------------------
+11.docker ps
+
+This command is used to list the running containers
+-------------------------------------------
+12.docker exec
+
+Usage: docker exec -it <container id> bash
+
+This command is used to access the running container
+---------------------------------------------
+13. docker stop
+
+Usage: docker stop <container id>
+
+This command stops a running container
+---------------------------------------------------
+14.docker kill
+
+Usage: docker kill <container id>
+
+This command kills the container by stopping its execution immediately. The difference between ‘docker kill’ and ‘docker stop’ is that ‘docker stop’ gives the container time to shutdown gracefully, in situations when it is taking too much time for getting the container to stop, one can opt to kill it
+---------------------------------------------
+15.docker commit
+
+Usage: docker commit <conatainer id> <username/imagename>
+
+This command creates a new image of an edited container on the local system
+--------------------------------------------------------
+16.docker login
+
+This command is used to login to the docker hub repository
+
+---------------------------------------------
+17.docker push
+
+Usage: docker push <username/image name>
+
+This command is used to push an image to the docker hub repository
+---------------------------------------------------
+18.docker images
+
+This command lists all the locally stored docker images
+
+
+========================================================================
+19.
+docker rm
+
+Usage: docker rm <container id>
+----------------------------------------------
+20.to remove image
+docker rmi image id
+-------------------------------------------------------
+21.To run docker image
+docker run -h 192.168.99.100 -p 7070:7070 -t my-repo/example  --name my-repo-image:latest
+------------------------------------------------------
+
+clean install dockerfile:build
+------------------------------------------
+docker run -h 192.168.99.100 -p 6060:6060 -t my-repo/boasample  --name my-repo-image1:latest
+------------------------------
+docker run --name boadb -e MYSQL_ROOT_PASSWORD=vignesh –e MYSQL_DATABASE=boadb –e MYSQL_USER=root  -p 3306:3306 mysql/mysql-server:latest
+---------------------------------------------------
+docker run -h 192.168.99.100 -p 7070:7070 -t my-repo/boakyc  --name my-repo-image2:latest
+
+docker-machine url
+---------------------------------------------
+to delete all docker containers
+docker rm $(docker ps -a -q)
+--------------------------------------------------
+1. copy spring boot project in docker tool box
+2. change application.properties url:jdbc:mysql://mysql:3306/demo
+username demo_user, password demo_pass
+----------------------------------------------------------
+3. 
+docker run --name demo-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=demo -e MYSQL_USER=demo_user -e MYSQL_PASSWORD=demo_pass -d mysql
+------------------------------------------------------------------
+4.docker logs demo-mysql
+4a. to check mysql status whether running or not
+docker exec -it demo-mysql mysql -u demo_user -p
+mysql>
+---------------------------------------------
+ docker rmi $(docker images -f "dangling=true" -q) [to remove dangling images]
+----------------------------------------------
+4c.Mongodb
+exception data/journal no space left
+docker volume rm $(docker volume ls -qf dangling=true)
+
+docker pull mongo
+docker run --name database -d -p 27017:27017 mongo 
+
+mongo --host 192.168.99.100 
+-------------------------------------------
+5.cd KYCAPP
+mvn clean package dockerfile:build
+----------------------------------------------------
+6.
+docker run -h 192.168.99.100 -p 7070:7070 --name demo-app --link demo-mysql:mysql -d my-repo/boakyc
+docker run -h 192.168.99.100 -p 7070:7070 --name demo-app 
+--link demo-mysql:mysql -d repo1/kycprocess
+                                                  
+docker run -h 192.168.99.100 -p 6060:6060 --name demo-app       
+--link database:mongo -d bankingdockerapp
+
+docker run -h 192.168.99.100 -p 7070:7070 --name customer-app -d customerimg
+-------------------------------------------------------------
+docker-compose up
+
+replicas
+docker stack ps getstartedlab
+docker stack services getstartedlab
+
+------------------------------------------------------------
+docker hub
+https://hub.docker.com/
+username:dockerid - not mail id -- eswaribala
+password:*****
+------------------------------------------------
+           image name            docker id  repo    tagname     
+docker tag dockersampling:latest eswaribala/rpsdockertraining:v1
+
+docker tag bankingdockerapp:latest eswaribala/rpscgimsrepo:v1
+
+docker tag globalins eswaribala/globalinsorepo:v1
+
+
+docker push eswaribala/rpsfdrepo:v1 
+
+docker push eswaribala/rpscgimsrepo:v1
+
+docker push eswaribala/globalinsorepo:v1
+--------------------------------------------------------------
+https://github.com/kubernetes/minikube/releases/tag/v1.11.0
+download kubectl.exe
+download  minikube installer
+------------------------------------------------------------
+kubectl run nginx --image=eswaribala/rpsdockerhubdemo
+
+-----------------------------------------------
+minikube config set memory 4096
+minikube config set cpus 2
+minikube config set vm-driver virtualbox
+minikube start
+minikube start -p cluster1 
+minikube status
+--------------------------------------------------------------
+minikube -p cluster1 dashboard
+--------------------------------------------------------------
+kubectl get pods --all-namespaces
+------------------------------------------------
+kubectl cluster-info
+--------------------------------
+kubectl version
+---------------------------------------------
+docker logout
+$ docker-machine restart default      # Restart the environment
+$ eval $(docker-machine env default)  # Refresh your environment settings
+
+docker login
+-------------------------------------------------------
+kubectl create -f "G:\Local disk\BOAChennai\deployment.yml"
+----------------------------------------------
+kubectl get nodes
+----------------------------------
+kubectl get deployments
+-------------------------------
+kubectl get replicasets
+kubectl describe replicasets
+minikube config set vm-driver virtualbox
+-----------------------------------
+kubectl expose deployment dockersampling --type=LoadBalancer 
+--name=samplingservice
+-------------------------------------
+
+kubectl get services samplingservice
+
+kubectl describe services my-service
+kubectl get endpoints
+ kubectl scale --replicas=1 deployment busybox
+kubectl autoscale deployment dockersampling --min=1 --max=4 --cpu-percent=20
+minikube addons list
+minikube addons enable heapster
+kubectl autoscale deployment <deployment-name> --min=2 --max=5 --cpu-percent=80
+minikube addons enable ingress
+--------------------------------------
+-----------------------------------------------
+kubectl apply -f "G:\Local disk\BOAChennai\k8service.yml"
+--------------------------------------------------
+ http://localhost:30001
+-------------------------------------
+# delete all pods
+kubectl delete --all pods --namespace=default
+
+
+# delete all deployments
+ kubectl delete --all deployments --namespace=default
+ 
+ # delete all services
+ kubectl delete --all services --namespace=default
+ ---------------------------------------------------
+
+docker volume create my-vol
+docker volume ls
+
+docker volume inspect my-vol
+[
+    {
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/my-vol/_data",
+        "Name": "my-vol",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+--------------------------
+docker volume rm my-vol
+--------------------------------------------------------------
+docker search microsoft
+docker pull microsoft/aspnetcore
+-------------------------------------------------------------
+cd aspnetapp
+docker build -t aspnetapp .
+docker run -it --rm -p 8000:80 aspnetapp
+or
+docker run -d -p 8000:80 --name testapp-c1 valuesdotnetapp
+http://192.168.99.100:8000/
+--------------------------------------------------------------
+dotnet new webapi
+dotnet add package Steeltoe.Discovery.Client -v 1.0.0-rc2
+dotnet restore
+dotnet build
+dotnet run
+http://localhost:7074/api/values
+---------------------------------------------------------
+dotnet new mvc
+dotnet add package Steeltoe.Discovery.Client -v 1.0.0-rc2
+dotnet restore
+--------------------------------------------------------
+Cloud Foundry
+https://run.pivotal.io/
+cf login -a api.run.pivotal.io
+
+cf push fd-pcf-demo
+----------------------------------------------------------
+docker webapi sql server
+$ mkdir dotnet-example
+$ cd dotnet-example
+$ dotnet new webapi
+$ dotnet restore
+change default port from 5000 to 7070
+$ dotnet run
+It is as same as dotnet restore && dotnet run
+check in browser http://localhost:7070/api/Values
+Add sql server to docker
+//$docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=vignesh' -p 1433:1433 --name sqlserver -d microsoft/mssql-server-linux
+docker run -e ACCEPT_EULA=Y -e SA_PASSWORD=vignesh -p 1433:1433 --name sqlserver -d microsoft/mssql-server-linux
+
+docker run --memory 4096m -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=vignesh'  -p 1433:1433 --name sqlserver -d microsoft/mssql-server-linux
+
+$dotnet add package MongoDB.Driver 
+$dotnet run
+check in browser http://localhost:7070/api/Album
+[]
+============================================================
+if you don't have compose file for sql server
+docker run -it --rm -p 7071:7071 --link sqlserver -e SQLSERVER_HOST=sqlserver dotnet-product
+=============================================================
+docker-compose up
+http://192.168.99.100:7072/api/Album
+
+
+------------------------------------------------------------
+docker rm $(docker ps -a -q)
+------------------------------------------
+https://console.aws.amazon.com/cloudformation
+
+Open the AWS CloudFormation console at https://console.aws.amazon.com/cloudformation.
+
+From the navigation bar, select a Region that supports Amazon EKS.
+
+Note
+
+Amazon EKS is available in the following Regions at this time:
+
+US West (Oregon) (us-west-2)
+
+US East (N. Virginia) (us-east-1)
+
+US East (Ohio) (us-east-2)
+
+EU (Frankfurt) (eu-central-1)
+
+EU (Stockholm) (eu-north-1)
+
+EU (Ireland) (eu-west-1)
+
+EU (London) (eu-west-2)
+
+EU (Paris) (eu-west-3)
+
+Asia Pacific (Tokyo) (ap-northeast-1)
+
+Asia Pacific (Seoul) (ap-northeast-2)
+
+Asia Pacific (Mumbai) (ap-south-1)
+
+Asia Pacific (Singapore) (ap-southeast-1)
+
+Asia Pacific (Sydney) (ap-southeast-2)
+
+Choose Create stack.
+
+For Choose a template, select Specify an Amazon S3 template URL.
+
+Paste the following URL into the text area and choose Next:
+
+https://amazon-eks.s3-us-west-2.amazonaws.com/cloudformation/2019-02-11/amazon-eks-vpc-sample.yaml
+
+VpcBlock
+192.168.0.0/16
+ The CIDR range for the VPC. This should be a valid private (RFC 1918) CIDR range.
+Subnet01Block
+192.168.64.0/18
+ CidrBlock for subnet 01 within the VPC
+Subnet02Block
+192.168.128.0/18
+ CidrBlock for subnet 02 within the VPC
+Subnet03Block
+192.168.192.0/18
+ CidrBlock for subnet 03 within the VPC. This is used only if the region has more than 2 AZs.
+
+
+On the Specify Details page, fill out the parameters accordingly, and then choose Next.
+
+Stack name: Choose a stack name for your AWS CloudFormation stack. For example, you can call it eks-vpc.
+
+VpcBlock: Choose a CIDR range for your VPC. You may leave the default value.
+
+Subnet01Block: Choose a CIDR range for subnet 1. You may leave the default value.
+
+Subnet02Block: Choose a CIDR range for subnet 2. You may leave the default value.
+
+Subnet03Block: Choose a CIDR range for subnet 3. You may leave the default value.
+
+(Optional) On the Options page, tag your stack resources. Choose Next.
+
+On the Review page, choose Create.
+
+When your stack is created, select it in the console and choose Outputs.
+
+Open the Amazon EKS console at https://console.aws.amazon.com/eks/home#/clusters.
+
+Choose Create cluster.
+
+Note
+
+If your IAM user does not have administrative privileges, you must explicitly add permissions for that user to call the Amazon EKS API operations. For more information, see Creating Amazon EKS IAM Policies.
+
+On the Create cluster page, fill in the following fields and then choose Create:
+
+Cluster name: A unique name for your cluster.
+
+Kubernetes version: The version of Kubernetes to use for your cluster. By default, the latest available version is selected.
+
+Role ARN: Select the IAM role that you created with Create your Amazon EKS Service Role.
+
+VPC: The VPC you created with Create your Amazon EKS Cluster VPC. You can find the name of your VPC in the drop-down list.
+
+Subnets: The SubnetIds values (comma-separated) from the AWS CloudFormation output that you generated with Create your Amazon EKS Cluster VPC. By default, the available subnets in the above VPC are preselected.
+
+Security Groups: The SecurityGroups value from the AWS CloudFormation output that you generated with Create your Amazon EKS Cluster VPC. This security group has ControlPlaneSecurityGroup in the drop-down name.
+
+Download AWS CLI 
+AWSCLI64PY3.msi
+https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html
+
+In console 
+aws --version
+aws-cli/1.16.113 Python/3.6.0 Windows/10 botocore/1.12.103
+aws eks --region region update-kubeconfig --name cluster_name
+aws eks --region us-east-2 update-kubeconfig --name rpscluster
+
+https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html
+
+kubectl get svc
+
+Launch and Configure Amazon EKS Worker Nodes
+https://console.aws.amazon.com/cloudformation
+repeat cluster steps to worker node
+create worker node
+worker node cluster name is as same as EKS cluster name-->test
+
+----------------------------------------------------------------
+Istio
+On Kubernetes 1.9:
+$ minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.9.4 \
+    --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" \
+    --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" \
+    --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota" \
+    --vm-driver=`your_vm_driver_choice`
+
+On Kubernetes 1.10:
+$ minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.10.0 \
+    --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" \
+    --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" \
+    --vm-driver=`your_vm_driver_choice`
+----------------------------------------------------
+kubectl create -f install/kubernetes/helm/helm-service-account.yaml
+helm init --service-account tiller
+helm install install/kubernetes/helm/istio --name istio --namespace istio-system
+kubectl get svc -n istio-system
+
+kubectl get pods -n istio-system
+kubectl apply -f samples/bookinfo/kube/bookinfo.yaml
+kubectl get services
+
+kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+
+--------------------------------------
+Installation steps
+
+minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.10.0 
+--extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" 
+--extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" 
+--vm-driver=virtualbox
+
+
+
+kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+
+Istio Core
+
+helm template install/kubernetes/helm/istio --name istio --namespace istio-system \
+  --set security.enabled=false \
+  --set ingress.enabled=false \
+  --set gateways.istio-ingressgateway.enabled=false \
+  --set gateways.istio-egressgateway.enabled=false \
+  --set galley.enabled=false \
+  --set sidecarInjectorWebhook.enabled=false \
+  --set mixer.enabled=false \
+  --set prometheus.enabled=false \
+  --set global.proxy.envoyStatsd.enabled=false \
+  --set pilot.sidecar=false > $HOME/istio-minimal.yaml
+
+Pilot 
+
+$kubectl create namespace istio-system
+$ kubectl apply -f $HOME/istio-minimal.yaml
+
+
+Option 2
+
+kubectl apply -f install/kubernetes/helm/helm-service-account.yaml
+helm init --service-account tiller
+helm install install/kubernetes/helm/istio --name istio-minimal --namespace istio-system \
+  --set security.enabled=false \
+  --set ingress.enabled=false \
+  --set gateways.istio-ingressgateway.enabled=false \
+  --set gateways.istio-egressgateway.enabled=false \
+  --set galley.enabled=false \
+  --set sidecarInjectorWebhook.enabled=false \
+  --set mixer.enabled=false \
+  --set prometheus.enabled=false \
+  --set global.proxy.envoyStatsd.enabled=false \
+  --set pilot.sidecar=false
+
+kubectl get pods -n istio-system
+
+
+
+ 
+
+
+
+
+
+
+
