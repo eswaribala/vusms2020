@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: demo
+  name: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: demo
+    spec:
+      containers:
+      - image: eswaribala/practicelab2020:v1
+        name: v1
+        resources: {}
+        env:
+            - name: MYSQL_URL
+              value: jdbc:mysql://mysql:3306/virtusausappointmentdb?useSSL=false
+               
+
+status: {}
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: demo
+  name: demo
+spec:
+  ports:
+  - name: 8070-8070
+    port: 8070
+    protocol: TCP
+    targetPort: 8070
+  selector:
+    app: demo
+  type: ClusterIP
+status:
+  loadBalancer: {}
