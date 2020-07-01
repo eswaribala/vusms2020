@@ -26,6 +26,10 @@ Digest: sha256:ccba511b...
 3.Run a Process Inside a Container
 docker container run centos ping -c 5 127.0.0.1
 ===================================
+Rename
+docker rename CONTAINER NEW_NAME
+
+====================================
 4.Listing Containers
  docker container ls
 ======================================
@@ -190,6 +194,13 @@ docker push eswaribala/rpscgimsrepo:v1
 
 docker push eswaribala/globalinsorepo:v1
 --------------------------------------------------------------
+docker logout
+$ docker-machine restart default      # Restart the environment
+$ eval $(docker-machine env default)  # Refresh your environment settings
+
+docker login
+
+-------------------------------------------------------
 https://github.com/kubernetes/minikube/releases/tag/v1.11.0
 download kubectl.exe
 download  minikube installer
@@ -212,14 +223,93 @@ kubectl cluster-info
 --------------------------------
 kubectl version
 ---------------------------------------------
-docker logout
-$ docker-machine restart default      # Restart the environment
-$ eval $(docker-machine env default)  # Refresh your environment settings
 
-docker login
+kubectl config current-context
+---------------------------------------------
+kubectl cluster-info
+------------------------------------------------
+kubectl get nodes
+------------------------------------------------
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+
+kubectl get all --all-namespaces
+
+kubectl get all -n kubernetes-dashboard
+
+
+
+goto g:\localdisk\docker
+
+kubectl apply -f  dashboard-adminuser.yaml
+
+kubectl apply -f admin-role-binding.yml
+
+go to powershell run the following cmd
+
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | sls admin-user | ForEach-Object { $_ -Split '\s+' } | Select -First 1)
+
+token
+
+eyJhbGciOiJSUzI1NiIsImtpZCI6IlNfbmFnUmVianhFaXhsdmNXT3R4SVloSVUwbnFRdXVjZHdBODFvT1FLd28ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWhjaDhxIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyMDFiZjhhYS02YTkwLTRhZDctYjlmMS00MWJlOWJkNjc2ZWYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.V9T7gt1OusQAqmUR9NoAV428cC_hh4tMRAWVvhx6EgE13mPNKu3yNGmLqFrEwf_yTqxAfAXSGKRZwK4s6f2td4u1jzTsFWFFzksAp47OeUug7MXhdzYPiZdsgsUdxFaNgpK_H9NX0yT8F_Z1muoiQE6--Ad7bfrI5TM4vqnpDmh4m9udi-53gk8ot_JwOm2Ytl3-EMqN8ZEalQQCcxvW30AzuqLxCgLoI7pTJjZZhuR4hnol-tn4OrkEUa2iTLReCq5TxSFwkFMq-4S2Ss7OcQKGUY6x0y_TwJnATu7pa-pwZqHRwt6Cn_ub_ciG9znlvlSehu61MjE2fn192A8aWA
+
 -------------------------------------------------------
-kubectl create -f "G:\Local disk\BOAChennai\deployment.yml"
-----------------------------------------------
+
+kubectl proxy
+Starting to serve on 127.0.0.1:8001
+http://localhost:8001
+======================================================
+
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+-------------------------------------------------
+kubectl get all
+--------------------------------------------------
+goto apppointmenntdocker project in f:\virtusausjune
+ kubectl apply -f mysql-pv.yaml
+kubectl apply -f mysql-deployment.yaml
+kubectl get all
+kubectl get services
+kubectl describe deployment mysql
+kubectl get pods -l app=mysql
+kubectl describe pvc mysql-pv-claim
+kubectl logs mysql-78dc9c6b94-vfgtq
+kubectl get services
+get ipaddress
+kubectl run -it --rm --image=mysql --restart=Never mysql-client -- mysql -h mysql -ppassword
+(don't change password it's ppassword)
+create database virtusausappointmentdb;
+show databases;
+======================================================
+Creating the secrets
+kubectl create secret generic mysql-root-pass --from-literal=password=password
+
+kubectl create secret generic mysql-user-pass --from-literal=username=demo_user --from-literal=password=demo_pass
+
+kubectl create secret generic mysql-db-url --from-literal=database=virtusausappointmentdb --from-literal=url='jdbc:mysql://mysql:3306/virtusausappointmentdb?useSSL=false
+
+kubectl get secrets
+kubectl describe secrets mysql-user-pass
+kubectl get persistentvolumes
+============================================================
+kubectl create deployment demo --image=appointmentapp/v1 --dry-run -o=yaml > deployment.yaml
+
+------------------------------------------------
+kubectl create service clusterip demo --tcp=8070:8070 --dry-run -o=yaml >> deployment.yaml
+
+==================================================
+kubectl apply -f deployment.yaml
+kubectl get pods
+kubectl get services
+
+kubectl port-forward service/demo 8070:8070
+
+======================================================
+delete service
+kubectl delete svc demo
+delete pod
+kubectl delete pod podname
+delete deployment
+kubectl delete deployment demo
+==================================================
 kubectl get nodes
 ----------------------------------
 kubectl get deployments
@@ -243,6 +333,8 @@ minikube addons enable heapster
 kubectl autoscale deployment <deployment-name> --min=2 --max=5 --cpu-percent=80
 minikube addons enable ingress
 --------------------------------------
+kubectl create -f "G:\Local disk\BOAChennai\deployment.yml"
+----------------------------------------------
 -----------------------------------------------
 kubectl apply -f "G:\Local disk\BOAChennai\k8service.yml"
 --------------------------------------------------
